@@ -8,9 +8,8 @@ package kotlinx.coroutines.experimental.guide.channel04
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.channels.*
 
+
 fun CoroutineScope.produceNumbers() = produce<Int> {
-    var x = 1
-    while (true) send(x++) // infinite stream of integers starting from 1
 }
 
 fun CoroutineScope.square(numbers: ReceiveChannel<Int>) = produce<Int> {

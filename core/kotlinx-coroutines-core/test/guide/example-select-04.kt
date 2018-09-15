@@ -8,6 +8,7 @@ package kotlinx.coroutines.experimental.guide.select04
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.channels.*
 import kotlinx.coroutines.experimental.selects.*
+
 import java.util.*
 
 fun CoroutineScope.asyncString(time: Int) = async {

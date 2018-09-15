@@ -8,6 +8,7 @@ package kotlinx.coroutines.experimental.guide.channel10
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.channels.*
 
+
 fun main(args: Array<String>) = runBlocking<Unit> {
     val tickerChannel = ticker(delay = 100, initialDelay = 0) // create ticker channel
     var nextElement = withTimeoutOrNull(1) { tickerChannel.receive() }

@@ -7,6 +7,7 @@ package kotlinx.coroutines.experimental.guide.channel07
 
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.channels.*
+
 import kotlin.coroutines.experimental.*
 
 suspend fun sendString(channel: SendChannel<String>, s: String, time: Long) {

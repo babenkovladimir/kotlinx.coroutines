@@ -8,6 +8,7 @@ package kotlinx.coroutines.experimental.guide.channel06
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.channels.*
 
+
 fun CoroutineScope.produceNumbers() = produce<Int> {
     var x = 1 // start from 1
     while (true) {

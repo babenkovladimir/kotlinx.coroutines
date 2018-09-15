@@ -8,6 +8,7 @@ package kotlinx.coroutines.experimental.guide.select03
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.channels.*
 import kotlinx.coroutines.experimental.selects.*
+
 import kotlin.coroutines.experimental.*
 
 fun CoroutineScope.produceNumbers(side: SendChannel<Int>) = produce<Int> {
