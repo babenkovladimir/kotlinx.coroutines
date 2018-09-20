@@ -11,6 +11,7 @@ import kotlin.coroutines.experimental.*
 /**
  * Mode for [ticker] function.
  */
+@ExperimentalCoroutinesApi
 enum class TickerMode {
     /**
      * Adjust delay to maintain fixed period if consumer cannot keep up or is otherwise slow.
@@ -55,9 +56,10 @@ enum class TickerMode {
  * @param context context of the producing coroutine.
  * @param mode specifies behavior when elements are not received ([FIXED_PERIOD][TickerMode.FIXED_PERIOD] by default).
  */
+@ExperimentalCoroutinesApi
 public fun ticker(
     delay: Long,
-    unit: TimeUnit = TimeUnit.MILLISECONDS,
+    unit: TimeUnit = TimeUnit.MILLISECONDS, // todo: remove
     initialDelay: Long = delay,
     context: CoroutineContext = EmptyCoroutineContext,
     mode: TickerMode = TickerMode.FIXED_PERIOD

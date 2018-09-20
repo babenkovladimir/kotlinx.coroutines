@@ -4,6 +4,8 @@
 
 package kotlinx.coroutines.experimental.selects
 
+import kotlinx.coroutines.experimental.*
+
 /**
  * Loops while [select] expression returns `true`.
  *
@@ -22,6 +24,7 @@ package kotlinx.coroutines.experimental.selects
  *    /*body*/
  * }) {}
  */
-suspend fun whileSelect(builder: SelectBuilder<Boolean>.() -> Unit) {
+@ExperimentalCoroutinesApi
+public suspend inline fun whileSelect(crossinline builder: SelectBuilder<Boolean>.() -> Unit) {
     while(select<Boolean>(builder)) {}
 }

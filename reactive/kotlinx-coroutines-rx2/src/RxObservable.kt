@@ -35,6 +35,7 @@ import kotlin.coroutines.experimental.*
  * @param context context of the coroutine.
  * @param block the coroutine code.
  */
+@ExperimentalCoroutinesApi
 public fun <T> CoroutineScope.rxObservable(
     context: CoroutineContext = EmptyCoroutineContext,
     block: suspend ProducerScope<T>.() -> Unit
@@ -64,10 +65,11 @@ private const val OPEN = 0        // open channel, still working
 private const val CLOSED = -1     // closed, but have not signalled onCompleted/onError yet
 private const val SIGNALLED = -2  // already signalled subscriber onCompleted/onError
 
+@Suppress("CONFLICTING_INHERITED_JVM_DECLARATIONS", "RETURN_TYPE_MISMATCH_ON_INHERITANCE")
 private class RxObservableCoroutine<T>(
     parentContext: CoroutineContext,
     private val subscriber: ObservableEmitter<T>
-) : AbstractCoroutine<Unit>(parentContext, true), ProducerScope<T>, Cancellable, SelectClause2<T, SendChannel<T>> {
+) : CancellableCoroutine<Unit>(parentContext, true), ProducerScope<T>, SelectClause2<T, SendChannel<T>> {
     override val channel: SendChannel<T> get() = this
 
     // Mutex is locked when while subscriber.onXXX is being invoked
@@ -167,7 +169,4 @@ private class RxObservableCoroutine<T>(
         if (mutex.tryLock()) // if we can acquire the lock
             doLockedSignalCompleted()
     }
-
-    // Cancellable impl
-    override fun cancel() { cancel(cause = null) }
 }

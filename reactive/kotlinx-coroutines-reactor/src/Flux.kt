@@ -29,6 +29,7 @@ import kotlin.coroutines.experimental.*
  * | Normal completion or `close` without cause   | `onComplete`
  * | Failure with exception or `close` with cause | `onError`
  */
+@ExperimentalCoroutinesApi
 fun <T> CoroutineScope.flux(
     context: CoroutineContext = EmptyCoroutineContext,
     block: suspend ProducerScope<T>.() -> Unit

@@ -18,6 +18,7 @@ internal const val DEFAULT_CLOSE_MESSAGE = "Channel was closed"
 /**
  * Returns a channel to read all element of the [Iterable].
  */
+@Deprecated("No replacement")
 public fun <E> Iterable<E>.asReceiveChannel(context: CoroutineContext = Dispatchers.Unconfined): ReceiveChannel<E> =
     GlobalScope.produce(context) {
         for (element in this@asReceiveChannel)
@@ -27,6 +28,7 @@ public fun <E> Iterable<E>.asReceiveChannel(context: CoroutineContext = Dispatch
 /**
  * Returns a channel to read all element of the [Sequence].
  */
+@Deprecated("No replacement")
 public fun <E> Sequence<E>.asReceiveChannel(context: CoroutineContext = Dispatchers.Unconfined): ReceiveChannel<E> =
     GlobalScope.produce(context) {
         for (element in this@asReceiveChannel)
@@ -39,6 +41,7 @@ public fun <E> Sequence<E>.asReceiveChannel(context: CoroutineContext = Dispatch
  * Opens subscription to this [BroadcastChannel] and makes sure that the given [block] consumes all elements
  * from it by always invoking [cancel][ReceiveChannel.cancel] after the execution of the block.
  */
+@ExperimentalCoroutinesApi
 public inline fun <E, R> BroadcastChannel<E>.consume(block: ReceiveChannel<E>.() -> R): R {
     val channel = openSubscription()
     try {
@@ -51,6 +54,7 @@ public inline fun <E, R> BroadcastChannel<E>.consume(block: ReceiveChannel<E>.()
 /**
  * Subscribes to this [BroadcastChannel] and performs the specified action for each received element.
  */
+@ExperimentalCoroutinesApi
 public suspend inline fun <E> BroadcastChannel<E>.consumeEach(action: (E) -> Unit) =
     consume {
         for (element in this) action(element)
@@ -74,7 +78,11 @@ public suspend fun <E> BroadcastChannel<E>.consumeEach(action: suspend (E) -> Un
  * immediately throws an [IllegalStateException].
  * See [this issue](https://github.com/Kotlin/kotlinx.coroutines/issues/167)
  * for details.
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public fun ReceiveChannel<*>.consumes(): CompletionHandler =
     { cause: Throwable? -> cancel(cause) }
 
@@ -82,7 +90,11 @@ public fun ReceiveChannel<*>.consumes(): CompletionHandler =
  * Returns a [CompletionHandler] that invokes [cancel][ReceiveChannel.cancel] on all the
  * specified [ReceiveChannel] instances with the corresponding cause.
  * See also [ReceiveChannel.consumes()] for a version on one channel.
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public fun consumesAll(vararg channels: ReceiveChannel<*>): CompletionHandler =
     { cause: Throwable? ->
         var exception: Throwable? = null
@@ -110,7 +122,11 @@ public fun consumesAll(vararg channels: ReceiveChannel<*>): CompletionHandler =
  * for details.
  *
  * The operation is _terminal_.
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public inline fun <E, R> ReceiveChannel<E>.consume(block: ReceiveChannel<E>.() -> R): R {
     var cause: Throwable? = null
     try {
@@ -134,7 +150,11 @@ public inline fun <E, R> ReceiveChannel<E>.consume(block: ReceiveChannel<E>.() -
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> ReceiveChannel<E>.consumeEach(action: (E) -> Unit) =
     consume {
         for (e in this) action(e)
@@ -152,7 +172,11 @@ public suspend fun <E> ReceiveChannel<E>.consumeEach(action: suspend (E) -> Unit
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> ReceiveChannel<E>.consumeEachIndexed(action: (IndexedValue<E>) -> Unit) {
     var index = 0
     consumeEach {
@@ -165,7 +189,11 @@ public suspend inline fun <E> ReceiveChannel<E>.consumeEachIndexed(action: (Inde
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E> ReceiveChannel<E>.elementAt(index: Int): E =
     elementAtOrElse(index) { throw IndexOutOfBoundsException("ReceiveChannel doesn't contain element at index $index.") }
 
@@ -174,7 +202,11 @@ public suspend fun <E> ReceiveChannel<E>.elementAt(index: Int): E =
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> ReceiveChannel<E>.elementAtOrElse(index: Int, defaultValue: (Int) -> E): E =
     consume {
         if (index < 0)
@@ -192,7 +224,11 @@ public suspend inline fun <E> ReceiveChannel<E>.elementAtOrElse(index: Int, defa
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E> ReceiveChannel<E>.elementAtOrNull(index: Int): E? =
     consume {
         if (index < 0)
@@ -210,7 +246,11 @@ public suspend fun <E> ReceiveChannel<E>.elementAtOrNull(index: Int): E? =
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> ReceiveChannel<E>.find(predicate: (E) -> Boolean): E? =
     firstOrNull(predicate)
 
@@ -219,7 +259,11 @@ public suspend inline fun <E> ReceiveChannel<E>.find(predicate: (E) -> Boolean):
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> ReceiveChannel<E>.findLast(predicate: (E) -> Boolean): E? =
     lastOrNull(predicate)
 
@@ -229,7 +273,11 @@ public suspend inline fun <E> ReceiveChannel<E>.findLast(predicate: (E) -> Boole
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E> ReceiveChannel<E>.first(): E =
     consume {
         val iterator = iterator()
@@ -244,7 +292,11 @@ public suspend fun <E> ReceiveChannel<E>.first(): E =
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> ReceiveChannel<E>.first(predicate: (E) -> Boolean): E {
     consumeEach {
         if (predicate(it)) return it
@@ -257,7 +309,11 @@ public suspend inline fun <E> ReceiveChannel<E>.first(predicate: (E) -> Boolean)
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E> ReceiveChannel<E>.firstOrNull(): E? =
     consume {
         val iterator = iterator()
@@ -271,7 +327,11 @@ public suspend fun <E> ReceiveChannel<E>.firstOrNull(): E? =
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public inline suspend fun <E> ReceiveChannel<E>.firstOrNull(predicate: (E) -> Boolean): E? {
     consumeEach {
         if (predicate(it)) return it
@@ -284,7 +344,11 @@ public inline suspend fun <E> ReceiveChannel<E>.firstOrNull(predicate: (E) -> Bo
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E> ReceiveChannel<E>.indexOf(element: E): Int {
     var index = 0
     consumeEach {
@@ -300,7 +364,11 @@ public suspend fun <E> ReceiveChannel<E>.indexOf(element: E): Int {
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> ReceiveChannel<E>.indexOfFirst(predicate: (E) -> Boolean): Int {
     var index = 0
     consumeEach {
@@ -316,7 +384,11 @@ public suspend inline fun <E> ReceiveChannel<E>.indexOfFirst(predicate: (E) -> B
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public inline suspend fun <E> ReceiveChannel<E>.indexOfLast(predicate: (E) -> Boolean): Int {
     var lastIndex = -1
     var index = 0
@@ -334,7 +406,11 @@ public inline suspend fun <E> ReceiveChannel<E>.indexOfLast(predicate: (E) -> Bo
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E> ReceiveChannel<E>.last(): E =
     consume {
         val iterator = iterator()
@@ -352,7 +428,11 @@ public suspend fun <E> ReceiveChannel<E>.last(): E =
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> ReceiveChannel<E>.last(predicate: (E) -> Boolean): E {
     var last: E? = null
     var found = false
@@ -372,7 +452,11 @@ public suspend inline fun <E> ReceiveChannel<E>.last(predicate: (E) -> Boolean):
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E> ReceiveChannel<E>.lastIndexOf(element: E): Int {
     var lastIndex = -1
     var index = 0
@@ -389,7 +473,11 @@ public suspend fun <E> ReceiveChannel<E>.lastIndexOf(element: E): Int {
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E> ReceiveChannel<E>.lastOrNull(): E? =
     consume {
         val iterator = iterator()
@@ -406,7 +494,11 @@ public suspend fun <E> ReceiveChannel<E>.lastOrNull(): E? =
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> ReceiveChannel<E>.lastOrNull(predicate: (E) -> Boolean): E? {
     var last: E? = null
     consumeEach {
@@ -422,7 +514,11 @@ public suspend inline fun <E> ReceiveChannel<E>.lastOrNull(predicate: (E) -> Boo
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E> ReceiveChannel<E>.single(): E =
     consume {
         val iterator = iterator()
@@ -439,7 +535,11 @@ public suspend fun <E> ReceiveChannel<E>.single(): E =
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> ReceiveChannel<E>.single(predicate: (E) -> Boolean): E {
     var single: E? = null
     var found = false
@@ -460,7 +560,11 @@ public suspend inline fun <E> ReceiveChannel<E>.single(predicate: (E) -> Boolean
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E> ReceiveChannel<E>.singleOrNull(): E? =
     consume {
         val iterator = iterator()
@@ -477,7 +581,11 @@ public suspend fun <E> ReceiveChannel<E>.singleOrNull(): E? =
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> ReceiveChannel<E>.singleOrNull(predicate: (E) -> Boolean): E? {
     var single: E? = null
     var found = false
@@ -497,7 +605,11 @@ public suspend inline fun <E> ReceiveChannel<E>.singleOrNull(predicate: (E) -> B
  *
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public fun <E> ReceiveChannel<E>.drop(n: Int, context: CoroutineContext = Dispatchers.Unconfined): ReceiveChannel<E> =
     GlobalScope.produce(context, onCompletion = consumes()) {
         require(n >= 0) { "Requested element count $n is less than zero." }
@@ -518,7 +630,11 @@ public fun <E> ReceiveChannel<E>.drop(n: Int, context: CoroutineContext = Dispat
  *
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 // todo: mark predicate with crossinline modifier when it is supported: https://youtrack.jetbrains.com/issue/KT-19159
 public fun <E> ReceiveChannel<E>.dropWhile(context: CoroutineContext = Dispatchers.Unconfined, predicate: suspend (E) -> Boolean): ReceiveChannel<E> =
     GlobalScope.produce(context, onCompletion = consumes()) {
@@ -538,7 +654,11 @@ public fun <E> ReceiveChannel<E>.dropWhile(context: CoroutineContext = Dispatche
  *
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 // todo: mark predicate with crossinline modifier when it is supported: https://youtrack.jetbrains.com/issue/KT-19159
 public fun <E> ReceiveChannel<E>.filter(context: CoroutineContext = Dispatchers.Unconfined, predicate: suspend (E) -> Boolean): ReceiveChannel<E> =
     GlobalScope.produce(context, onCompletion = consumes()) {
@@ -554,7 +674,11 @@ public fun <E> ReceiveChannel<E>.filter(context: CoroutineContext = Dispatchers.
  *
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 // todo: mark predicate with crossinline modifier when it is supported: https://youtrack.jetbrains.com/issue/KT-19159
 public fun <E> ReceiveChannel<E>.filterIndexed(context: CoroutineContext = Dispatchers.Unconfined, predicate: suspend (index: Int, E) -> Boolean): ReceiveChannel<E> =
     GlobalScope.produce(context, onCompletion = consumes()) {
@@ -571,7 +695,11 @@ public fun <E> ReceiveChannel<E>.filterIndexed(context: CoroutineContext = Dispa
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, C : MutableCollection<in E>> ReceiveChannel<E>.filterIndexedTo(destination: C, predicate: (index: Int, E) -> Boolean): C {
     consumeEachIndexed { (index, element) ->
         if (predicate(index, element)) destination.add(element)
@@ -586,7 +714,11 @@ public suspend inline fun <E, C : MutableCollection<in E>> ReceiveChannel<E>.fil
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, C : SendChannel<E>> ReceiveChannel<E>.filterIndexedTo(destination: C, predicate: (index: Int, E) -> Boolean): C {
     consumeEachIndexed { (index, element) ->
         if (predicate(index, element)) destination.send(element)
@@ -599,7 +731,11 @@ public suspend inline fun <E, C : SendChannel<E>> ReceiveChannel<E>.filterIndexe
  *
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 // todo: mark predicate with crossinline modifier when it is supported: https://youtrack.jetbrains.com/issue/KT-19159
 public fun <E> ReceiveChannel<E>.filterNot(context: CoroutineContext = Dispatchers.Unconfined, predicate: suspend (E) -> Boolean): ReceiveChannel<E> =
     filter(context) { !predicate(it) }
@@ -615,7 +751,11 @@ public fun <E> ReceiveChannel<E>.filterNot(predicate: suspend (E) -> Boolean): R
  *
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 @Suppress("UNCHECKED_CAST")
 public fun <E : Any> ReceiveChannel<E?>.filterNotNull(): ReceiveChannel<E> =
     filter { it != null } as ReceiveChannel<E>
@@ -625,7 +765,11 @@ public fun <E : Any> ReceiveChannel<E?>.filterNotNull(): ReceiveChannel<E> =
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E : Any, C : MutableCollection<in E>> ReceiveChannel<E?>.filterNotNullTo(destination: C): C {
     consumeEach {
         if (it != null) destination.add(it)
@@ -638,7 +782,11 @@ public suspend fun <E : Any, C : MutableCollection<in E>> ReceiveChannel<E?>.fil
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E : Any, C : SendChannel<E>> ReceiveChannel<E?>.filterNotNullTo(destination: C): C {
     consumeEach {
         if (it != null) destination.send(it)
@@ -651,7 +799,11 @@ public suspend fun <E : Any, C : SendChannel<E>> ReceiveChannel<E?>.filterNotNul
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, C : MutableCollection<in E>> ReceiveChannel<E>.filterNotTo(destination: C, predicate: (E) -> Boolean): C {
     consumeEach {
         if (!predicate(it)) destination.add(it)
@@ -664,7 +816,11 @@ public suspend inline fun <E, C : MutableCollection<in E>> ReceiveChannel<E>.fil
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, C : SendChannel<E>> ReceiveChannel<E>.filterNotTo(destination: C, predicate: (E) -> Boolean): C {
     consumeEach {
         if (!predicate(it)) destination.send(it)
@@ -677,7 +833,11 @@ public suspend inline fun <E, C : SendChannel<E>> ReceiveChannel<E>.filterNotTo(
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, C : MutableCollection<in E>> ReceiveChannel<E>.filterTo(destination: C, predicate: (E) -> Boolean): C {
     consumeEach {
         if (predicate(it)) destination.add(it)
@@ -690,7 +850,11 @@ public suspend inline fun <E, C : MutableCollection<in E>> ReceiveChannel<E>.fil
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, C : SendChannel<E>> ReceiveChannel<E>.filterTo(destination: C, predicate: (E) -> Boolean): C {
     consumeEach {
         if (predicate(it)) destination.send(it)
@@ -703,7 +867,11 @@ public suspend inline fun <E, C : SendChannel<E>> ReceiveChannel<E>.filterTo(des
  *
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public fun <E> ReceiveChannel<E>.take(n: Int, context: CoroutineContext = Dispatchers.Unconfined): ReceiveChannel<E> =
     GlobalScope.produce(context, onCompletion = consumes()) {
         if (n == 0) return@produce
@@ -722,7 +890,11 @@ public fun <E> ReceiveChannel<E>.take(n: Int, context: CoroutineContext = Dispat
  *
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 // todo: mark predicate with crossinline modifier when it is supported: https://youtrack.jetbrains.com/issue/KT-19159
 public fun <E> ReceiveChannel<E>.takeWhile(context: CoroutineContext = Dispatchers.Unconfined, predicate: suspend (E) -> Boolean): ReceiveChannel<E> =
     GlobalScope.produce(context, onCompletion = consumes()) {
@@ -742,7 +914,11 @@ public fun <E> ReceiveChannel<E>.takeWhile(context: CoroutineContext = Dispatche
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, K, V> ReceiveChannel<E>.associate(transform: (E) -> Pair<K, V>): Map<K, V> =
     associateTo(LinkedHashMap(), transform)
 
@@ -756,7 +932,11 @@ public suspend inline fun <E, K, V> ReceiveChannel<E>.associate(transform: (E) -
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, K> ReceiveChannel<E>.associateBy(keySelector: (E) -> K): Map<K, E> =
     associateByTo(LinkedHashMap(), keySelector)
 
@@ -769,7 +949,11 @@ public suspend inline fun <E, K> ReceiveChannel<E>.associateBy(keySelector: (E) 
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, K, V> ReceiveChannel<E>.associateBy(keySelector: (E) -> K, valueTransform: (E) -> V): Map<K, V> =
     associateByTo(LinkedHashMap(), keySelector, valueTransform)
 
@@ -782,7 +966,11 @@ public suspend inline fun <E, K, V> ReceiveChannel<E>.associateBy(keySelector: (
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, K, M : MutableMap<in K, in E>> ReceiveChannel<E>.associateByTo(destination: M, keySelector: (E) -> K): M {
     consumeEach {
         destination.put(keySelector(it), it)
@@ -799,7 +987,11 @@ public suspend inline fun <E, K, M : MutableMap<in K, in E>> ReceiveChannel<E>.a
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, K, V, M : MutableMap<in K, in V>> ReceiveChannel<E>.associateByTo(destination: M, keySelector: (E) -> K, valueTransform: (E) -> V): M {
     consumeEach {
         destination.put(keySelector(it), valueTransform(it))
@@ -815,7 +1007,11 @@ public suspend inline fun <E, K, V, M : MutableMap<in K, in V>> ReceiveChannel<E
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, K, V, M : MutableMap<in K, in V>> ReceiveChannel<E>.associateTo(destination: M, transform: (E) -> Pair<K, V>): M {
     consumeEach {
         destination += transform(it)
@@ -829,7 +1025,11 @@ public suspend inline fun <E, K, V, M : MutableMap<in K, in V>> ReceiveChannel<E
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E, C : SendChannel<E>> ReceiveChannel<E>.toChannel(destination: C): C {
     consumeEach {
         destination.send(it)
@@ -842,7 +1042,11 @@ public suspend fun <E, C : SendChannel<E>> ReceiveChannel<E>.toChannel(destinati
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E, C : MutableCollection<in E>> ReceiveChannel<E>.toCollection(destination: C): C {
     consumeEach {
         destination.add(it)
@@ -864,7 +1068,11 @@ public suspend fun <E> ReceiveChannel<E>.toList(): List<E> =
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <K, V> ReceiveChannel<Pair<K, V>>.toMap(): Map<K, V> =
     toMap(LinkedHashMap())
 
@@ -873,7 +1081,11 @@ public suspend fun <K, V> ReceiveChannel<Pair<K, V>>.toMap(): Map<K, V> =
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <K, V, M : MutableMap<in K, in V>> ReceiveChannel<Pair<K, V>>.toMap(destination: M): M {
     consumeEach {
         destination += it
@@ -886,7 +1098,11 @@ public suspend fun <K, V, M : MutableMap<in K, in V>> ReceiveChannel<Pair<K, V>>
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E> ReceiveChannel<E>.toMutableList(): MutableList<E> =
     toCollection(ArrayList())
 
@@ -897,7 +1113,11 @@ public suspend fun <E> ReceiveChannel<E>.toMutableList(): MutableList<E> =
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E> ReceiveChannel<E>.toSet(): Set<E> =
     this.toMutableSet()
 
@@ -906,7 +1126,11 @@ public suspend fun <E> ReceiveChannel<E>.toSet(): Set<E> =
  *
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 // todo: mark predicate with crossinline modifier when it is supported: https://youtrack.jetbrains.com/issue/KT-19159
 public fun <E, R> ReceiveChannel<E>.flatMap(context: CoroutineContext = Dispatchers.Unconfined, transform: suspend (E) -> ReceiveChannel<R>): ReceiveChannel<R> =
     GlobalScope.produce(context, onCompletion = consumes()) {
@@ -923,7 +1147,11 @@ public fun <E, R> ReceiveChannel<E>.flatMap(context: CoroutineContext = Dispatch
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, K> ReceiveChannel<E>.groupBy(keySelector: (E) -> K): Map<K, List<E>> =
     groupByTo(LinkedHashMap(), keySelector)
 
@@ -936,7 +1164,11 @@ public suspend inline fun <E, K> ReceiveChannel<E>.groupBy(keySelector: (E) -> K
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, K, V> ReceiveChannel<E>.groupBy(keySelector: (E) -> K, valueTransform: (E) -> V): Map<K, List<V>> =
     groupByTo(LinkedHashMap(), keySelector, valueTransform)
 
@@ -948,7 +1180,11 @@ public suspend inline fun <E, K, V> ReceiveChannel<E>.groupBy(keySelector: (E) -
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, K, M : MutableMap<in K, MutableList<E>>> ReceiveChannel<E>.groupByTo(destination: M, keySelector: (E) -> K): M {
     consumeEach {
         val key = keySelector(it)
@@ -967,7 +1203,11 @@ public suspend inline fun <E, K, M : MutableMap<in K, MutableList<E>>> ReceiveCh
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, K, V, M : MutableMap<in K, MutableList<V>>> ReceiveChannel<E>.groupByTo(destination: M, keySelector: (E) -> K, valueTransform: (E) -> V): M {
     consumeEach {
         val key = keySelector(it)
@@ -1000,7 +1240,11 @@ public fun <E, R> ReceiveChannel<E>.map(context: CoroutineContext = Dispatchers.
  *
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 // todo: mark predicate with crossinline modifier when it is supported: https://youtrack.jetbrains.com/issue/KT-19159
 public fun <E, R> ReceiveChannel<E>.mapIndexed(context: CoroutineContext = Dispatchers.Unconfined, transform: suspend (index: Int, E) -> R): ReceiveChannel<R> =
     GlobalScope.produce(context, onCompletion = consumes()) {
@@ -1018,7 +1262,11 @@ public fun <E, R> ReceiveChannel<E>.mapIndexed(context: CoroutineContext = Dispa
  *
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 // todo: mark predicate with crossinline modifier when it is supported: https://youtrack.jetbrains.com/issue/KT-19159
 public fun <E, R : Any> ReceiveChannel<E>.mapIndexedNotNull(context: CoroutineContext = Dispatchers.Unconfined, transform: suspend (index: Int, E) -> R?): ReceiveChannel<R> =
     mapIndexed(context, transform).filterNotNull()
@@ -1031,7 +1279,11 @@ public fun <E, R : Any> ReceiveChannel<E>.mapIndexedNotNull(context: CoroutineCo
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, R : Any, C : MutableCollection<in R>> ReceiveChannel<E>.mapIndexedNotNullTo(destination: C, transform: (index: Int, E) -> R?): C {
     consumeEachIndexed { (index, element) ->
         transform(index, element)?.let { destination.add(it) }
@@ -1047,7 +1299,11 @@ public suspend inline fun <E, R : Any, C : MutableCollection<in R>> ReceiveChann
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, R : Any, C : SendChannel<R>> ReceiveChannel<E>.mapIndexedNotNullTo(destination: C, transform: (index: Int, E) -> R?): C {
     consumeEachIndexed { (index, element) ->
         transform(index, element)?.let { destination.send(it) }
@@ -1063,7 +1319,11 @@ public suspend inline fun <E, R : Any, C : SendChannel<R>> ReceiveChannel<E>.map
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, R, C : MutableCollection<in R>> ReceiveChannel<E>.mapIndexedTo(destination: C, transform: (index: Int, E) -> R): C {
     var index = 0
     consumeEach {
@@ -1080,7 +1340,11 @@ public suspend inline fun <E, R, C : MutableCollection<in R>> ReceiveChannel<E>.
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, R, C : SendChannel<R>> ReceiveChannel<E>.mapIndexedTo(destination: C, transform: (index: Int, E) -> R): C {
     var index = 0
     consumeEach {
@@ -1095,7 +1359,11 @@ public suspend inline fun <E, R, C : SendChannel<R>> ReceiveChannel<E>.mapIndexe
  *
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 // todo: mark predicate with crossinline modifier when it is supported: https://youtrack.jetbrains.com/issue/KT-19159
 public fun <E, R : Any> ReceiveChannel<E>.mapNotNull(context: CoroutineContext = Dispatchers.Unconfined, transform: suspend (E) -> R?): ReceiveChannel<R> =
     map(context, transform).filterNotNull()
@@ -1106,7 +1374,11 @@ public fun <E, R : Any> ReceiveChannel<E>.mapNotNull(context: CoroutineContext =
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, R : Any, C : MutableCollection<in R>> ReceiveChannel<E>.mapNotNullTo(destination: C, transform: (E) -> R?): C {
     consumeEach {
         transform(it)?.let { destination.add(it) }
@@ -1120,7 +1392,11 @@ public suspend inline fun <E, R : Any, C : MutableCollection<in R>> ReceiveChann
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, R : Any, C : SendChannel<R>> ReceiveChannel<E>.mapNotNullTo(destination: C, transform: (E) -> R?): C {
     consumeEach {
         transform(it)?.let { destination.send(it) }
@@ -1134,7 +1410,11 @@ public suspend inline fun <E, R : Any, C : SendChannel<R>> ReceiveChannel<E>.map
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, R, C : MutableCollection<in R>> ReceiveChannel<E>.mapTo(destination: C, transform: (E) -> R): C {
     consumeEach {
         destination.add(transform(it))
@@ -1148,7 +1428,11 @@ public suspend inline fun <E, R, C : MutableCollection<in R>> ReceiveChannel<E>.
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, R, C : SendChannel<R>> ReceiveChannel<E>.mapTo(destination: C, transform: (E) -> R): C {
     consumeEach {
         destination.send(transform(it))
@@ -1161,7 +1445,11 @@ public suspend inline fun <E, R, C : SendChannel<R>> ReceiveChannel<E>.mapTo(des
  *
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public fun <E> ReceiveChannel<E>.withIndex(context: CoroutineContext = Dispatchers.Unconfined): ReceiveChannel<IndexedValue<E>> =
     GlobalScope.produce(context, onCompletion = consumes()) {
         var index = 0
@@ -1177,7 +1465,11 @@ public fun <E> ReceiveChannel<E>.withIndex(context: CoroutineContext = Dispatche
  *
  * The operation is _intermediate_ and _stateful_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public fun <E> ReceiveChannel<E>.distinct(): ReceiveChannel<E> =
     this.distinctBy { it }
 
@@ -1189,7 +1481,11 @@ public fun <E> ReceiveChannel<E>.distinct(): ReceiveChannel<E> =
  *
  * The operation is _intermediate_ and _stateful_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 // todo: mark predicate with crossinline modifier when it is supported: https://youtrack.jetbrains.com/issue/KT-19159
 public fun <E, K> ReceiveChannel<E>.distinctBy(context: CoroutineContext = Dispatchers.Unconfined, selector: suspend (E) -> K): ReceiveChannel<E> =
     GlobalScope.produce(context, onCompletion = consumes()) {
@@ -1210,7 +1506,11 @@ public fun <E, K> ReceiveChannel<E>.distinctBy(context: CoroutineContext = Dispa
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E> ReceiveChannel<E>.toMutableSet(): MutableSet<E> =
     toCollection(LinkedHashSet())
 
@@ -1219,7 +1519,11 @@ public suspend fun <E> ReceiveChannel<E>.toMutableSet(): MutableSet<E> =
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> ReceiveChannel<E>.all(predicate: (E) -> Boolean): Boolean {
     consumeEach {
         if (!predicate(it)) return false
@@ -1232,7 +1536,11 @@ public suspend inline fun <E> ReceiveChannel<E>.all(predicate: (E) -> Boolean): 
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E> ReceiveChannel<E>.any(): Boolean =
     consume {
         return iterator().hasNext()
@@ -1243,7 +1551,11 @@ public suspend fun <E> ReceiveChannel<E>.any(): Boolean =
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> ReceiveChannel<E>.any(predicate: (E) -> Boolean): Boolean {
     consumeEach {
         if (predicate(it)) return true
@@ -1256,7 +1568,11 @@ public suspend inline fun <E> ReceiveChannel<E>.any(predicate: (E) -> Boolean): 
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E> ReceiveChannel<E>.count(): Int {
     var count = 0
     consumeEach { count++ }
@@ -1268,7 +1584,11 @@ public suspend fun <E> ReceiveChannel<E>.count(): Int {
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> ReceiveChannel<E>.count(predicate: (E) -> Boolean): Int {
     var count = 0
     consumeEach {
@@ -1282,7 +1602,11 @@ public suspend inline fun <E> ReceiveChannel<E>.count(predicate: (E) -> Boolean)
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, R> ReceiveChannel<E>.fold(initial: R, operation: (acc: R, E) -> R): R {
     var accumulator = initial
     consumeEach {
@@ -1299,7 +1623,11 @@ public suspend inline fun <E, R> ReceiveChannel<E>.fold(initial: R, operation: (
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, R> ReceiveChannel<E>.foldIndexed(initial: R, operation: (index: Int, acc: R, E) -> R): R {
     var index = 0
     var accumulator = initial
@@ -1314,7 +1642,11 @@ public suspend inline fun <E, R> ReceiveChannel<E>.foldIndexed(initial: R, opera
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, R : Comparable<R>> ReceiveChannel<E>.maxBy(selector: (E) -> R): E? =
     consume {
         val iterator = iterator()
@@ -1337,7 +1669,11 @@ public suspend inline fun <E, R : Comparable<R>> ReceiveChannel<E>.maxBy(selecto
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E> ReceiveChannel<E>.maxWith(comparator: Comparator<in E>): E? =
     consume {
         val iterator = iterator()
@@ -1355,7 +1691,11 @@ public suspend fun <E> ReceiveChannel<E>.maxWith(comparator: Comparator<in E>): 
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E, R : Comparable<R>> ReceiveChannel<E>.minBy(selector: (E) -> R): E? =
     consume {
         val iterator = iterator()
@@ -1378,7 +1718,11 @@ public suspend inline fun <E, R : Comparable<R>> ReceiveChannel<E>.minBy(selecto
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E> ReceiveChannel<E>.minWith(comparator: Comparator<in E>): E? =
     consume {
         val iterator = iterator()
@@ -1396,7 +1740,11 @@ public suspend fun <E> ReceiveChannel<E>.minWith(comparator: Comparator<in E>): 
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend fun <E> ReceiveChannel<E>.none(): Boolean =
     consume {
         return !iterator().hasNext()
@@ -1407,7 +1755,11 @@ public suspend fun <E> ReceiveChannel<E>.none(): Boolean =
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> ReceiveChannel<E>.none(predicate: (E) -> Boolean): Boolean {
     consumeEach {
         if (predicate(it)) return false
@@ -1420,7 +1772,11 @@ public suspend inline fun <E> ReceiveChannel<E>.none(predicate: (E) -> Boolean):
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <S, E : S> ReceiveChannel<E>.reduce(operation: (acc: S, E) -> S): S =
     consume {
         val iterator = this.iterator()
@@ -1440,7 +1796,11 @@ public suspend inline fun <S, E : S> ReceiveChannel<E>.reduce(operation: (acc: S
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 // todo: mark operation with crossinline modifier when it is supported: https://youtrack.jetbrains.com/issue/KT-19159
 public suspend inline fun <S, E : S> ReceiveChannel<E>.reduceIndexed(operation: (index: Int, acc: S, E) -> S): S =
     consume {
@@ -1459,7 +1819,11 @@ public suspend inline fun <S, E : S> ReceiveChannel<E>.reduceIndexed(operation: 
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> ReceiveChannel<E>.sumBy(selector: (E) -> Int): Int {
     var sum = 0
     consumeEach {
@@ -1473,7 +1837,11 @@ public suspend inline fun <E> ReceiveChannel<E>.sumBy(selector: (E) -> Int): Int
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> ReceiveChannel<E>.sumByDouble(selector: (E) -> Double): Double {
     var sum = 0.0
     consumeEach {
@@ -1487,7 +1855,11 @@ public suspend inline fun <E> ReceiveChannel<E>.sumByDouble(selector: (E) -> Dou
  *
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public fun <E : Any> ReceiveChannel<E?>.requireNoNulls(): ReceiveChannel<E> =
     map { it ?: throw IllegalArgumentException("null element found in $this.") }
 
@@ -1498,7 +1870,11 @@ public fun <E : Any> ReceiveChannel<E?>.requireNoNulls(): ReceiveChannel<E> =
  *
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> ReceiveChannel<E>.partition(predicate: (E) -> Boolean): Pair<List<E>, List<E>> {
     val first = ArrayList<E>()
     val second = ArrayList<E>()
@@ -1518,7 +1894,11 @@ public suspend inline fun <E> ReceiveChannel<E>.partition(predicate: (E) -> Bool
  *
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of both the original [ReceiveChannel] and the `other` one.
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 public infix fun <E, R> ReceiveChannel<E>.zip(other: ReceiveChannel<R>): ReceiveChannel<Pair<E, R>> =
     zip(other) { t1, t2 -> t1 to t2 }
 
@@ -1527,7 +1907,11 @@ public infix fun <E, R> ReceiveChannel<E>.zip(other: ReceiveChannel<R>): Receive
  *
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][consume] all elements of both the original [ReceiveChannel] and the `other` one.
+ *
+ * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
+@ObsoleteCoroutinesApi
 // todo: mark transform with crossinline modifier when it is supported: https://youtrack.jetbrains.com/issue/KT-19159
 public fun <E, R, V> ReceiveChannel<E>.zip(other: ReceiveChannel<R>, context: CoroutineContext = Dispatchers.Unconfined, transform: (a: E, b: R) -> V): ReceiveChannel<V> =
     GlobalScope.produce(context, onCompletion = consumesAll(this, other)) {

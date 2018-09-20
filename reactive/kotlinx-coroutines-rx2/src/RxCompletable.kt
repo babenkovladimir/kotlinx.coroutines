@@ -52,10 +52,11 @@ public fun rxCompletable(
     block: suspend CoroutineScope.() -> Unit
 ): Completable = GlobalScope.rxCompletable(context + (parent ?: EmptyCoroutineContext), block)
 
+@Suppress("CONFLICTING_INHERITED_JVM_DECLARATIONS", "RETURN_TYPE_MISMATCH_ON_INHERITANCE")
 private class RxCompletableCoroutine(
     parentContext: CoroutineContext,
     private val subscriber: CompletableEmitter
-) : AbstractCoroutine<Unit>(parentContext, true), Cancellable {
+) : CancellableCoroutine<Unit>(parentContext, true) {
     override fun onCompleted(value: Unit) {
         if (!subscriber.isDisposed) subscriber.onComplete()
     }
@@ -63,7 +64,4 @@ private class RxCompletableCoroutine(
     override fun onCompletedExceptionally(exception: Throwable) {
         if (!subscriber.isDisposed) subscriber.onError(exception)
     }
-
-    // Cancellable impl
-    override fun cancel() { cancel(cause = null) }
 }

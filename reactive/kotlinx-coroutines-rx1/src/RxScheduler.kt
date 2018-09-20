@@ -28,21 +28,20 @@ public class SchedulerCoroutineDispatcher(private val scheduler: Scheduler) : Co
         scheduler.createWorker().schedule { block.run() }
     }
 
-    override fun scheduleResumeAfterDelay(time: Long, unit: TimeUnit, continuation: CancellableContinuation<Unit>) =
+    override fun scheduleResumeAfterDelay(timeMillis: Long, continuation: CancellableContinuation<Unit>) =
         scheduler.createWorker()
                 .schedule({
                     with(continuation) { resumeUndispatched(Unit) }
-                 }, time, unit)
+                 }, timeMillis, TimeUnit.MILLISECONDS)
                 .let { subscription ->
                     continuation.unsubscribeOnCancellation(subscription)
                 }
 
-    override fun invokeOnTimeout(time: Long, unit: TimeUnit, block: Runnable): DisposableHandle =
-        scheduler.createWorker().schedule({ block.run() }, time, unit).asDisposableHandle()
+    override fun invokeOnTimeout(timeMillis: Long, block: Runnable): DisposableHandle =
+        scheduler.createWorker().schedule({ block.run() }, timeMillis, TimeUnit.MILLISECONDS).asDisposableHandle()
 
-    private fun Subscription.asDisposableHandle(): DisposableHandle = object : DisposableHandle {
-        override fun dispose() = unsubscribe()
-    }
+    private fun Subscription.asDisposableHandle(): DisposableHandle =
+        DisposableHandle { unsubscribe() }
 
     override fun toString(): String = scheduler.toString()
     override fun equals(other: Any?): Boolean = other is SchedulerCoroutineDispatcher && other.scheduler === scheduler

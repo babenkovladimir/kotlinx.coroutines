@@ -32,6 +32,7 @@ import kotlin.coroutines.experimental.*
  * @param context context of the coroutine.
  * @param block the coroutine code.
  */
+@ExperimentalCoroutinesApi
 public fun <T> CoroutineScope.rxFlowable(
     context: CoroutineContext = EmptyCoroutineContext,
     block: suspend ProducerScope<T>.() -> Unit

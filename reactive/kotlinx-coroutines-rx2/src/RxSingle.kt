@@ -52,10 +52,11 @@ public fun <T> rxSingle(
     block: suspend CoroutineScope.() -> T
 ): Single<T> = GlobalScope.rxSingle(context + (parent ?: EmptyCoroutineContext), block)
 
+@Suppress("CONFLICTING_INHERITED_JVM_DECLARATIONS", "RETURN_TYPE_MISMATCH_ON_INHERITANCE")
 private class RxSingleCoroutine<T>(
     parentContext: CoroutineContext,
     private val subscriber: SingleEmitter<T>
-) : AbstractCoroutine<T>(parentContext, true), Cancellable {
+) : CancellableCoroutine<T>(parentContext, true) {
     override fun onCompleted(value: T) {
         if (!subscriber.isDisposed) subscriber.onSuccess(value)
     }
@@ -63,7 +64,4 @@ private class RxSingleCoroutine<T>(
     override fun onCompletedExceptionally(exception: Throwable) {
         if (!subscriber.isDisposed) subscriber.onError(exception)
     }
-
-    // Cancellable impl
-    override fun cancel() { cancel(cause = null) }
 }

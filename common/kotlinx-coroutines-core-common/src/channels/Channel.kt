@@ -7,6 +7,7 @@ package kotlinx.coroutines.experimental.channels
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.channels.Channel.Factory.CONFLATED
 import kotlinx.coroutines.experimental.channels.Channel.Factory.UNLIMITED
+import kotlinx.coroutines.experimental.internal.*
 import kotlinx.coroutines.experimental.selects.*
 
 /**
@@ -17,12 +18,14 @@ public interface SendChannel<in E> {
      * Returns `true` if this channel was closed by invocation of [close] and thus
      * the [send] and [offer] attempts throws exception.
      */
+    @ExperimentalCoroutinesApi
     public val isClosedForSend: Boolean
 
     /**
      * Returns `true` if the channel is full (out of capacity) and the [send] attempt will suspend.
      * This function returns `false` for [isClosedForSend] channel.
      */
+    @ExperimentalCoroutinesApi
     public val isFull: Boolean
 
     /**
@@ -68,7 +71,7 @@ public interface SendChannel<in E> {
     public fun offer(element: E): Boolean
 
     /**
-     * Closes this channel with an optional exceptional [cause].
+     * Closes this channel.
      * This is an idempotent operation -- repeated invocations of this function have no effect and return `false`.
      * Conceptually, its sends a special "close token" over this channel.
      *
@@ -115,6 +118,7 @@ public interface SendChannel<in E> {
      *
      * @throws IllegalStateException if another handler was already registered
      */
+    @ExperimentalCoroutinesApi
     public fun invokeOnClose(handler: (cause: Throwable?) -> Unit)
 }
 
@@ -129,12 +133,14 @@ public interface ReceiveChannel<out E> {
      * is considered closed, too, but it is called a _failed_ channel. All suspending attempts to receive
      * an element from a failed channel throw the original [close][SendChannel.close] cause exception.
      */
+    @ExperimentalCoroutinesApi
     public val isClosedForReceive: Boolean
 
     /**
      * Returns `true` if the channel is empty (contains no elements) and the [receive] attempt will suspend.
      * This function returns `false` for [isClosedForReceive] channel.
      */
+    @ExperimentalCoroutinesApi
     public val isEmpty: Boolean
 
     /**
@@ -188,6 +194,7 @@ public interface ReceiveChannel<out E> {
      * This function can be used in [select] invocation with [onReceiveOrNull] clause.
      * Use [poll] to try receiving from this channel without waiting.
      */
+    @ExperimentalCoroutinesApi
     public suspend fun receiveOrNull(): E?
 
     /**
@@ -196,6 +203,7 @@ public interface ReceiveChannel<out E> {
      * [isClosedForReceive] without cause. The [select] invocation fails with
      * the original [close][SendChannel.close] cause exception if the channel has _failed_.
      */
+    @ExperimentalCoroutinesApi
     public val onReceiveOrNull: SelectClause1<E?>
 
     /**
@@ -213,6 +221,19 @@ public interface ReceiveChannel<out E> {
     public operator fun iterator(): ChannelIterator<E>
 
     /**
+     * Cancels reception of remaining elements from this channel. This function closes the channel
+     * and removes all buffered sent elements from it.
+     * This function returns `true` if the channel was not closed previously, or `false` otherwise.
+     *
+     * Immediately after invocation of this function [isClosedForReceive] and
+     * [isClosedForSend][SendChannel.isClosedForSend]
+     * on the side of [SendChannel] start returning `true`, so all attempts to send to this channel
+     * afterwards will throw [ClosedSendChannelException], while attempts to receive will throw
+     * [ClosedReceiveChannelException].
+     */
+    public fun cancel(): Boolean
+
+    /**
      * Cancels reception of remaining elements from this channel. This function closes the channel with
      * the specified cause (unless it was already closed) and removes all buffered sent elements from it.
      * This function returns `true` if the channel was not closed previously, or `false` otherwise.
@@ -225,6 +246,7 @@ public interface ReceiveChannel<out E> {
      * A channel that was cancelled with non-null [cause] is called a _failed_ channel. Attempts to send or
      * receive on a failed channel throw the specified [cause] exception.
      */
+    @ExperimentalCoroutinesApi
     public fun cancel(cause: Throwable? = null): Boolean
 }
 
@@ -313,6 +335,7 @@ public interface Channel<E> : SendChannel<E>, ReceiveChannel<E> {
 /**
  * Creates a channel without a buffer -- [RendezvousChannel].
  */
+@Deprecated(level = DeprecationLevel.HIDDEN, message = "binary compat")
 public fun <E> Channel(): Channel<E> = RendezvousChannel<E>()
 
 /**
@@ -325,7 +348,8 @@ public fun <E> Channel(): Channel<E> = RendezvousChannel<E>()
  * * when `capacity` is positive, but less than [UNLIMITED] -- creates [ArrayChannel] with a buffer of the specified `capacity`;
  * * otherwise -- throws [IllegalArgumentException].
  */
-public fun <E> Channel(capacity: Int): Channel<E> =
+// todo: docs
+public fun <E> Channel(capacity: Int = 0): Channel<E> =
     when (capacity) {
         0 -> RendezvousChannel()
         UNLIMITED -> LinkedListChannel()
@@ -345,4 +369,5 @@ public class ClosedSendChannelException(message: String?) : CancellationExceptio
  * channel that was closed without a cause. A _failed_ channel rethrows the original [close][SendChannel.close] cause
  * exception on receive attempts.
  */
+// todo: explain when this exception is thrown
 public class ClosedReceiveChannelException(message: String?) : NoSuchElementException(message)
