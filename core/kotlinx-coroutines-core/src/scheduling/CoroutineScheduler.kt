@@ -246,7 +246,7 @@ internal class CoroutineScheduler(
     private val random = Random()
 
     // This is used a "stop signal" for debugging/tests only
-    private val isTerminated = atomic(false)
+    private val isTerminated = atomic(0)
 
     companion object {
         private const val MAX_SPINS = 1000
@@ -299,7 +299,7 @@ internal class CoroutineScheduler(
      */
     fun shutdown(timeout: Long) {
         // atomically set termination flag which is checked when workers are added or removed
-        if (!isTerminated.compareAndSet(false, true)) return
+        if (!isTerminated.compareAndSet(0, 1)) return
         // Capture # of created workers that cannot change anymore (mind the synchronized block!)
         val created = synchronized(workers) { createdWorkers }
         for (i in 1..created) {
@@ -431,7 +431,7 @@ internal class CoroutineScheduler(
     private fun createNewWorker(): Int {
         synchronized(workers) {
             // Make sure we're not trying to resurrect terminated scheduler
-            if (isTerminated.value) throw ShutdownException()
+            if (isTerminated.value == 1) throw ShutdownException()
             val state = controlState.value
             val created = createdWorkers(state)
             val blocking = blockingWorkers(state)
@@ -679,7 +679,7 @@ internal class CoroutineScheduler(
         override fun run() {
             try {
                 var wasIdle = false // local variable to avoid extra idleReset invocations when tasks repeatedly arrive
-                while (!isTerminated.value && state != WorkerState.TERMINATED) {
+                while (isTerminated.value == 0 && state != WorkerState.TERMINATED) {
                     val task = findTask()
                     if (task == null) {
                         // Wait for a job with potential park
@@ -815,7 +815,7 @@ internal class CoroutineScheduler(
         private fun tryTerminateWorker() {
             synchronized(workers) {
                 // Make sure we're not trying race with termination of scheduler
-                if (isTerminated.value) throw ShutdownException()
+                if (isTerminated.value == 1) throw ShutdownException()
                 // Someone else terminated, bail out
                 if (createdWorkers <= corePoolSize) return
                 // Try to find blocking task before termination

@@ -198,6 +198,42 @@ public suspend inline fun <T> suspendAtomicCancellableCoroutine(
     }
 
 /**
+ *  Suspends coroutine similar to [suspendAtomicCancellableCoroutine], but an instance of cancellable continuation is reused if possible.
+ *
+ *  How it works:
+ *  1) In tight tail-call loop, raw continuation instance is reused (e.g. see channel benchmarks).
+ *  2) All our dispatchers intercept this continuation and wrap it into [DispatchedContinuation],
+ *     so [Runnable] object is reused for the same continuation among different suspension points.
+ *  3) `suspendAtomicCancellableCoroutineReusable` checks that [DispatchedContinuation.reusableCancellableContinuation] is
+ *      either `null` ("not initialized") or already cached value.
+ *      If it is not null, then it's reused, but its state is reset. Note that it's general-purpose operation:
+ *      cancellability state is **fully** reset and if any reference to the instance of cached cancellable continuation was saved
+ *      in user code, then **any** race (e.g. resume/cancelling) will produce undefined behaviour.
+ *
+ * To avoid memory leaks with parent-child relationship, [ContinuationInterceptor.releaseInerceptedContinuation]
+ * deregisters from parent when continuation is complete.
+ */
+internal suspend inline fun <T> suspendAtomicCancellableCoroutineReusable(
+    crossinline block: (CancellableContinuation<T>) -> Unit
+): T = suspendCoroutineUninterceptedOrReturn { uCont ->
+    val intercepted = uCont.intercepted()
+    // Non-capturing lambda on purpose
+    require(intercepted is DispatchedContinuation<T>) { "Intercepted continuation should be instance of 'DispatchedContinuation'" }
+
+    var cancellable = intercepted.reusableCancellableContinuation
+    if (cancellable != null) {
+        cancellable.resetState()
+    } else {
+        cancellable = CancellableContinuationImpl(intercepted, resumeMode = MODE_ATOMIC_DEFAULT)
+        intercepted.reusableCancellableContinuation = cancellable
+    }
+
+    cancellable.initCancellability()
+    block(cancellable)
+    cancellable.getResult()
+}
+
+/**
  * Removes a given node on cancellation.
  * @suppress **This is unstable API and it is subject to change.**
  */

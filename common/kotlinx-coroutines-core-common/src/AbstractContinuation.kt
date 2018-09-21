@@ -82,7 +82,19 @@ internal abstract class AbstractContinuation<in T>(
 
     protected open val useCancellingState: Boolean get() = false
 
+    private fun isReusable(): Boolean = delegate is DispatchedContinuation<*> && delegate.reusableCancellableContinuation === this
+
     internal fun initParentJobInternal(parent: Job?) {
+        // Do not re-attach child is this instance is reusable, but
+        if (isReusable()) {
+            // avoid 2 volatile vreads
+            val handle = parentHandle
+            if (handle !== null) {
+                require((handle as ChildContinuation).job === parent)
+                return
+            }
+        }
+
         check(parentHandle == null)
         if (parent == null) {
             parentHandle = NonDisposableHandle
@@ -98,6 +110,21 @@ internal abstract class AbstractContinuation<in T>(
             handle.dispose()
             parentHandle = NonDisposableHandle // release it just in case, to aid GC
         }
+    }
+
+    /**
+     * Resets cancellability state in order to [suspendAtomicCancellableCoroutineReusable] to work.
+     */
+    internal fun resetState() {
+        require(parentHandle !== null)
+        _state.value = ACTIVE
+        _decision.value = UNDECIDED
+    }
+
+    internal fun deattach() {
+        val handle = parentHandle
+        handle?.dispose()
+        parentHandle = NonDisposableHandle
     }
 
     override fun takeState(): Any? = state
@@ -319,6 +346,10 @@ internal abstract class AbstractContinuation<in T>(
     protected fun tryUpdateStateToFinal(expect: NotCompleted, update: Any?): Boolean {
         require(update !is NotCompleted) // only NotCompleted -> completed transition is allowed
         if (!_state.compareAndSet(expect, update)) return false
+
+        if (isReusable()) {
+            return true
+        }
         // Unregister from parent job
         parentHandle?.let {
             it.dispose() // volatile read parentHandle _after_ state was updated
