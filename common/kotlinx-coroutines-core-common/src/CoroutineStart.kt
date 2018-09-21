@@ -70,6 +70,8 @@ public enum class CoroutineStart {
      *
      * Cancellability of coroutine at suspension points depends on the particular implementation details of
      * suspending functions as in [DEFAULT].
+     *
+     * **Note: This is an experimental api.** Execution semantics of coroutines may change in the future when this mode is used.
      */
     @ExperimentalCoroutinesApi
     UNDISPATCHED;

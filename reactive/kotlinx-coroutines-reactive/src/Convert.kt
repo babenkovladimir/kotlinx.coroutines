@@ -15,7 +15,7 @@ import kotlin.coroutines.experimental.*
  * Every subscriber receives values from this channel in **fan-out** fashion. If the are multiple subscribers,
  * they'll receive values in round-robin way.
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  *
  * @param context -- the coroutine context from which the resulting observable is going to be signalled

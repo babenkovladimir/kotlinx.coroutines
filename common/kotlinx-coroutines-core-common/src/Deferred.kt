@@ -102,6 +102,8 @@ public interface Deferred<out T> : Job {
      *
      * This function is designed to be used from [invokeOnCompletion] handlers, when there is an absolute certainty that
      * the value is already complete. See also [getCompletionExceptionOrNull].
+     *
+     * **Note: This is an experimental api.** This function may be removed or renamed in the future.
      */
     @ExperimentalCoroutinesApi
     public fun getCompleted(): T
@@ -113,6 +115,8 @@ public interface Deferred<out T> : Job {
      *
      * This function is designed to be used from [invokeOnCompletion] handlers, when there is an absolute certainty that
      * the value is already complete. See also [getCompleted].
+     *
+     * **Note: This is an experimental api.** This function may be removed or renamed in the future.
      */
     @ExperimentalCoroutinesApi
     public fun getCompletionExceptionOrNull(): Throwable?

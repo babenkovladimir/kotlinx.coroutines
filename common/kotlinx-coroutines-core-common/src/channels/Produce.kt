@@ -10,6 +10,9 @@ import kotlin.coroutines.experimental.*
 
 /**
  * Scope for [produce][CoroutineScope.produce] coroutine builder.
+ *
+ * **Note: This is an experimental api.** Behaviour of producers that work as children in a parent scope with respect
+ *        to cancellation and error handling may change in the future.
  */
 @ExperimentalCoroutinesApi
 public interface ProducerScope<in E> : CoroutineScope, SendChannel<E> {
@@ -60,6 +63,9 @@ interface ProducerJob<out E> : ReceiveChannel<E>, Job {
  * * otherwise -- throws [IllegalArgumentException].
  *
  * See [newCoroutineContext] for a description of debugging facilities that are available for newly created coroutine.
+ *
+ * **Note: This is an experimental api.** Behaviour of producers that work as children in a parent scope with respect
+ *        to cancellation and error handling may change in the future.
  *
  * @param context additional to [CoroutineScope.coroutineContext] context of the coroutine.
  * @param capacity capacity of the channel's buffer (no buffer by default).

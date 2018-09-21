@@ -25,7 +25,7 @@ import kotlinx.coroutines.experimental.selects.*
  * [opening][openSubscription] and [closing][ReceiveChannel.cancel] subscription takes O(N) time, where N is the
  * number of subscribers.
  *
- * **Note**: This API is experimental and will be changed in the future updates.
+ * **Note: This API is experimental.** It may be changed in the future updates.
  */
 @ExperimentalCoroutinesApi
 public class ConflatedBroadcastChannel<E>() : BroadcastChannel<E> {

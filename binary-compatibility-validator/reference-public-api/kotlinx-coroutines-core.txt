@@ -939,11 +939,13 @@ public final class kotlinx/coroutines/experimental/channels/ProduceKt {
 	public static final fun produce (Lkotlin/coroutines/experimental/CoroutineContext;ILkotlinx/coroutines/experimental/Job;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;)Lkotlinx/coroutines/experimental/channels/ReceiveChannel;
 	public static final synthetic fun produce (Lkotlin/coroutines/experimental/CoroutineContext;ILkotlinx/coroutines/experimental/Job;Lkotlin/jvm/functions/Function2;)Lkotlinx/coroutines/experimental/channels/ReceiveChannel;
 	public static final fun produce (Lkotlinx/coroutines/experimental/CoroutineScope;Lkotlin/coroutines/experimental/CoroutineContext;ILkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;)Lkotlinx/coroutines/experimental/channels/ReceiveChannel;
+	public static final fun produce (Lkotlinx/coroutines/experimental/CoroutineScope;Lkotlin/coroutines/experimental/CoroutineContext;ILkotlin/jvm/functions/Function2;)Lkotlinx/coroutines/experimental/channels/ReceiveChannel;
 	public static synthetic fun produce$default (Lkotlin/coroutines/experimental/CoroutineContext;ILkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkotlinx/coroutines/experimental/channels/ReceiveChannel;
 	public static synthetic fun produce$default (Lkotlin/coroutines/experimental/CoroutineContext;ILkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkotlinx/coroutines/experimental/channels/ProducerJob;
 	public static synthetic fun produce$default (Lkotlin/coroutines/experimental/CoroutineContext;ILkotlinx/coroutines/experimental/Job;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkotlinx/coroutines/experimental/channels/ReceiveChannel;
 	public static synthetic fun produce$default (Lkotlin/coroutines/experimental/CoroutineContext;ILkotlinx/coroutines/experimental/Job;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkotlinx/coroutines/experimental/channels/ReceiveChannel;
 	public static synthetic fun produce$default (Lkotlinx/coroutines/experimental/CoroutineScope;Lkotlin/coroutines/experimental/CoroutineContext;ILkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkotlinx/coroutines/experimental/channels/ReceiveChannel;
+	public static synthetic fun produce$default (Lkotlinx/coroutines/experimental/CoroutineScope;Lkotlin/coroutines/experimental/CoroutineContext;ILkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lkotlinx/coroutines/experimental/channels/ReceiveChannel;
 }
 
 public abstract interface class kotlinx/coroutines/experimental/channels/ProducerJob : kotlinx/coroutines/experimental/Job, kotlinx/coroutines/experimental/channels/ReceiveChannel {
@@ -1038,7 +1040,9 @@ public final class kotlinx/coroutines/experimental/channels/SubscriptionReceiveC
 }
 
 public final class kotlinx/coroutines/experimental/channels/TickerChannelsKt {
+	public static final fun ticker (JJLkotlin/coroutines/experimental/CoroutineContext;Lkotlinx/coroutines/experimental/channels/TickerMode;)Lkotlinx/coroutines/experimental/channels/ReceiveChannel;
 	public static final fun ticker (JLjava/util/concurrent/TimeUnit;JLkotlin/coroutines/experimental/CoroutineContext;Lkotlinx/coroutines/experimental/channels/TickerMode;)Lkotlinx/coroutines/experimental/channels/ReceiveChannel;
+	public static synthetic fun ticker$default (JJLkotlin/coroutines/experimental/CoroutineContext;Lkotlinx/coroutines/experimental/channels/TickerMode;ILjava/lang/Object;)Lkotlinx/coroutines/experimental/channels/ReceiveChannel;
 	public static synthetic fun ticker$default (JLjava/util/concurrent/TimeUnit;JLkotlin/coroutines/experimental/CoroutineContext;Lkotlinx/coroutines/experimental/channels/TickerMode;ILjava/lang/Object;)Lkotlinx/coroutines/experimental/channels/ReceiveChannel;
 }
 

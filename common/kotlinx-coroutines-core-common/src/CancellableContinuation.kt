@@ -150,6 +150,8 @@ public interface CancellableContinuation<in T> : Continuation<T> {
      * [dispatch][CoroutineDispatcher.dispatch] function of the [CoroutineDispatcher] in the [context].
      * This function is designed to be used only by the [CoroutineDispatcher] implementations themselves.
      * **It should not be used in general code**.
+     *
+     * **Note: This function is experimental.** Its signature general code may be changed in the future.
      */
     @ExperimentalCoroutinesApi
     public fun CoroutineDispatcher.resumeUndispatched(value: T)
@@ -159,6 +161,8 @@ public interface CancellableContinuation<in T> : Continuation<T> {
      * [dispatch][CoroutineDispatcher.dispatch] function of the [CoroutineDispatcher] in the [context].
      * This function is designed to be used only by the [CoroutineDispatcher] implementations themselves.
      * **It should not be used in general code**.
+     *
+     * **Note: This function is experimental.** Its signature general code may be changed in the future.
      */
     @ExperimentalCoroutinesApi
     public fun CoroutineDispatcher.resumeUndispatchedWithException(exception: Throwable)

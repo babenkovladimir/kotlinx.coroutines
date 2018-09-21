@@ -13,7 +13,7 @@ import kotlinx.coroutines.experimental.channels.*
  * Subscribes to this [MaybeSource] and returns a channel to receive elements emitted by it.
  * The resulting channel shall be [cancelled][ReceiveChannel.cancel] to unsubscribe from this source.
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -33,7 +33,7 @@ public fun <T> MaybeSource<T>.openSubscription(): SubscriptionReceiveChannel<T> 
  * Subscribes to this [ObservableSource] and returns a channel to receive elements emitted by it.
  * The resulting channel shall be [cancelled][ReceiveChannel.cancel] to unsubscribe from this source.
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi

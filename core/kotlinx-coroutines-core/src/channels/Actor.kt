@@ -13,7 +13,7 @@ import kotlin.coroutines.experimental.*
 /**
  * Scope for [actor][GlobalScope.actor] coroutine builder.
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of complex actors.
+ * **Note: This API will become obsolete in future updates with introduction of complex actors.**
  *           See [issue #87](https://github.com/Kotlin/kotlinx.coroutines/issues/87).
  */
 @ObsoleteCoroutinesApi
@@ -109,16 +109,14 @@ interface ActorJob<in E> : SendChannel<E> {
  * "`for (msg in channel)`" and other cancellable suspending functions throw [CancellationException] and actor
  * completes without processing remaining messages.
  *
- * **Note**: This API is experimental and will be changed in the future updates.
+ * **Note: This API will become obsolete in future updates with introduction of complex actors.**
+ *           See [issue #87](https://github.com/Kotlin/kotlinx.coroutines/issues/87).
  *
  * @param context additional to [CoroutineScope.coroutineContext] context of the coroutine.
  * @param capacity capacity of the channel's buffer (no buffer by default).
  * @param start coroutine start option. The default value is [CoroutineStart.DEFAULT].
  * @param onCompletion optional completion handler for the actor coroutine (see [Job.invokeOnCompletion]).
  * @param block the coroutine code.
- *
- * **NOTE**: This API will become obsolete in future updates with rollout of complex actors.
- *           See [issue #87](https://github.com/Kotlin/kotlinx.coroutines/issues/87).
  */
 @ObsoleteCoroutinesApi
 public fun <E> CoroutineScope.actor(

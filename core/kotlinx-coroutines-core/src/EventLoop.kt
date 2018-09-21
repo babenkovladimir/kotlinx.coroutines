@@ -79,11 +79,14 @@ private const val RESCHEDULED = 2
 private const val MS_TO_NS = 1_000_000L
 private const val MAX_MS = Long.MAX_VALUE / MS_TO_NS
 
-private fun delayToNanos(timeMillis: Long): Long = when {
+internal fun delayToNanos(timeMillis: Long): Long = when {
     timeMillis <= 0 -> 0L
     timeMillis >= MAX_MS -> Long.MAX_VALUE
     else -> timeMillis * MS_TO_NS
 }
+
+internal fun delayNanosToMillis(timeNanos: Long): Long =
+    timeNanos / MS_TO_NS
 
 @Suppress("PrivatePropertyName")
 private val CLOSED_EMPTY = Symbol("CLOSED_EMPTY")

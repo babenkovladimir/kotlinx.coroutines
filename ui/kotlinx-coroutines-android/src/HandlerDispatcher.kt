@@ -29,7 +29,10 @@ public sealed class HandlerDispatcher : CoroutineDispatcher(), Delay {
      * Returns dispatcher that executes coroutines immediately when it is already in the right handler context
      * (current looper is the same as this handler's looper). See [isDispatchNeeded] documentation on
      * why this should not be done by default.
+     *
+     * **Note: This is an experimental api.** Semantics of this dispatcher may change in the future.
      */
+    @ExperimentalCoroutinesApi
     public abstract val immediate: HandlerDispatcher
 }
 

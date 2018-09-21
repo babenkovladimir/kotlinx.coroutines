@@ -31,6 +31,9 @@ import kotlin.coroutines.experimental.*
  * The parent job is inherited from a [CoroutineScope] as well, but it can also be overridden
  * with corresponding [coroutineContext] element.
  *
+ * **Note: This is an experimental api.** Behaviour of publishers that work as children in a parent scope with respect
+ *        to cancellation and error handling may change in the future.
+ *
  * @param context context of the coroutine.
  * @param block the coroutine code.
  */

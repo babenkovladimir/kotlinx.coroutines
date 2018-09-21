@@ -72,6 +72,9 @@ public val IO: CoroutineDispatcher
  *
  * Coroutine name can be explicitly assigned using [CoroutineName] context element.
  * The string "coroutine" is used as a default name.
+ *
+ * **Note: This is an experimental api.**
+ *   Behavior of this function may change in the future with respect to its support for debugging facilities.
  */
 @ExperimentalCoroutinesApi
 public actual fun CoroutineScope.newCoroutineContext(context: CoroutineContext): CoroutineContext {

@@ -40,8 +40,11 @@ public fun <E> Sequence<E>.asReceiveChannel(context: CoroutineContext = Dispatch
 /**
  * Opens subscription to this [BroadcastChannel] and makes sure that the given [block] consumes all elements
  * from it by always invoking [cancel][ReceiveChannel.cancel] after the execution of the block.
+ *
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
-@ExperimentalCoroutinesApi
+@ObsoleteCoroutinesApi
 public inline fun <E, R> BroadcastChannel<E>.consume(block: ReceiveChannel<E>.() -> R): R {
     val channel = openSubscription()
     try {
@@ -53,8 +56,11 @@ public inline fun <E, R> BroadcastChannel<E>.consume(block: ReceiveChannel<E>.()
 
 /**
  * Subscribes to this [BroadcastChannel] and performs the specified action for each received element.
+ *
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
+ *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
-@ExperimentalCoroutinesApi
+@ObsoleteCoroutinesApi
 public suspend inline fun <E> BroadcastChannel<E>.consumeEach(action: (E) -> Unit) =
     consume {
         for (element in this) action(element)
@@ -79,7 +85,7 @@ public suspend fun <E> BroadcastChannel<E>.consumeEach(action: suspend (E) -> Un
  * See [this issue](https://github.com/Kotlin/kotlinx.coroutines/issues/167)
  * for details.
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -91,7 +97,7 @@ public fun ReceiveChannel<*>.consumes(): CompletionHandler =
  * specified [ReceiveChannel] instances with the corresponding cause.
  * See also [ReceiveChannel.consumes()] for a version on one channel.
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -123,7 +129,7 @@ public fun consumesAll(vararg channels: ReceiveChannel<*>): CompletionHandler =
  *
  * The operation is _terminal_.
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -151,7 +157,7 @@ public inline fun <E, R> ReceiveChannel<E>.consume(block: ReceiveChannel<E>.() -
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -173,7 +179,7 @@ public suspend fun <E> ReceiveChannel<E>.consumeEach(action: suspend (E) -> Unit
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -190,7 +196,7 @@ public suspend inline fun <E> ReceiveChannel<E>.consumeEachIndexed(action: (Inde
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -203,7 +209,7 @@ public suspend fun <E> ReceiveChannel<E>.elementAt(index: Int): E =
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -225,7 +231,7 @@ public suspend inline fun <E> ReceiveChannel<E>.elementAtOrElse(index: Int, defa
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -247,7 +253,7 @@ public suspend fun <E> ReceiveChannel<E>.elementAtOrNull(index: Int): E? =
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -260,7 +266,7 @@ public suspend inline fun <E> ReceiveChannel<E>.find(predicate: (E) -> Boolean):
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -274,7 +280,7 @@ public suspend inline fun <E> ReceiveChannel<E>.findLast(predicate: (E) -> Boole
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -293,7 +299,7 @@ public suspend fun <E> ReceiveChannel<E>.first(): E =
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -310,7 +316,7 @@ public suspend inline fun <E> ReceiveChannel<E>.first(predicate: (E) -> Boolean)
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -328,7 +334,7 @@ public suspend fun <E> ReceiveChannel<E>.firstOrNull(): E? =
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -345,7 +351,7 @@ public inline suspend fun <E> ReceiveChannel<E>.firstOrNull(predicate: (E) -> Bo
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -365,7 +371,7 @@ public suspend fun <E> ReceiveChannel<E>.indexOf(element: E): Int {
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -385,7 +391,7 @@ public suspend inline fun <E> ReceiveChannel<E>.indexOfFirst(predicate: (E) -> B
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -407,7 +413,7 @@ public inline suspend fun <E> ReceiveChannel<E>.indexOfLast(predicate: (E) -> Bo
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -429,7 +435,7 @@ public suspend fun <E> ReceiveChannel<E>.last(): E =
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -453,7 +459,7 @@ public suspend inline fun <E> ReceiveChannel<E>.last(predicate: (E) -> Boolean):
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -474,7 +480,7 @@ public suspend fun <E> ReceiveChannel<E>.lastIndexOf(element: E): Int {
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -495,7 +501,7 @@ public suspend fun <E> ReceiveChannel<E>.lastOrNull(): E? =
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -515,7 +521,7 @@ public suspend inline fun <E> ReceiveChannel<E>.lastOrNull(predicate: (E) -> Boo
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -536,7 +542,7 @@ public suspend fun <E> ReceiveChannel<E>.single(): E =
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -561,7 +567,7 @@ public suspend inline fun <E> ReceiveChannel<E>.single(predicate: (E) -> Boolean
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -582,7 +588,7 @@ public suspend fun <E> ReceiveChannel<E>.singleOrNull(): E? =
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -606,7 +612,7 @@ public suspend inline fun <E> ReceiveChannel<E>.singleOrNull(predicate: (E) -> B
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -631,7 +637,7 @@ public fun <E> ReceiveChannel<E>.drop(n: Int, context: CoroutineContext = Dispat
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -655,7 +661,7 @@ public fun <E> ReceiveChannel<E>.dropWhile(context: CoroutineContext = Dispatche
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -675,7 +681,7 @@ public fun <E> ReceiveChannel<E>.filter(context: CoroutineContext = Dispatchers.
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -696,7 +702,7 @@ public fun <E> ReceiveChannel<E>.filterIndexed(context: CoroutineContext = Dispa
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -715,7 +721,7 @@ public suspend inline fun <E, C : MutableCollection<in E>> ReceiveChannel<E>.fil
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -732,7 +738,7 @@ public suspend inline fun <E, C : SendChannel<E>> ReceiveChannel<E>.filterIndexe
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -752,7 +758,7 @@ public fun <E> ReceiveChannel<E>.filterNot(predicate: suspend (E) -> Boolean): R
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -766,7 +772,7 @@ public fun <E : Any> ReceiveChannel<E?>.filterNotNull(): ReceiveChannel<E> =
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -783,7 +789,7 @@ public suspend fun <E : Any, C : MutableCollection<in E>> ReceiveChannel<E?>.fil
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -800,7 +806,7 @@ public suspend fun <E : Any, C : SendChannel<E>> ReceiveChannel<E?>.filterNotNul
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -817,7 +823,7 @@ public suspend inline fun <E, C : MutableCollection<in E>> ReceiveChannel<E>.fil
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -834,7 +840,7 @@ public suspend inline fun <E, C : SendChannel<E>> ReceiveChannel<E>.filterNotTo(
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -851,7 +857,7 @@ public suspend inline fun <E, C : MutableCollection<in E>> ReceiveChannel<E>.fil
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -868,7 +874,7 @@ public suspend inline fun <E, C : SendChannel<E>> ReceiveChannel<E>.filterTo(des
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -891,7 +897,7 @@ public fun <E> ReceiveChannel<E>.take(n: Int, context: CoroutineContext = Dispat
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -915,7 +921,7 @@ public fun <E> ReceiveChannel<E>.takeWhile(context: CoroutineContext = Dispatche
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -933,7 +939,7 @@ public suspend inline fun <E, K, V> ReceiveChannel<E>.associate(transform: (E) -
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -950,7 +956,7 @@ public suspend inline fun <E, K> ReceiveChannel<E>.associateBy(keySelector: (E) 
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -967,7 +973,7 @@ public suspend inline fun <E, K, V> ReceiveChannel<E>.associateBy(keySelector: (
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -988,7 +994,7 @@ public suspend inline fun <E, K, M : MutableMap<in K, in E>> ReceiveChannel<E>.a
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1008,7 +1014,7 @@ public suspend inline fun <E, K, V, M : MutableMap<in K, in V>> ReceiveChannel<E
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1026,7 +1032,7 @@ public suspend inline fun <E, K, V, M : MutableMap<in K, in V>> ReceiveChannel<E
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1043,7 +1049,7 @@ public suspend fun <E, C : SendChannel<E>> ReceiveChannel<E>.toChannel(destinati
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1069,7 +1075,7 @@ public suspend fun <E> ReceiveChannel<E>.toList(): List<E> =
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1082,7 +1088,7 @@ public suspend fun <K, V> ReceiveChannel<Pair<K, V>>.toMap(): Map<K, V> =
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1099,7 +1105,7 @@ public suspend fun <K, V, M : MutableMap<in K, in V>> ReceiveChannel<Pair<K, V>>
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1114,7 +1120,7 @@ public suspend fun <E> ReceiveChannel<E>.toMutableList(): MutableList<E> =
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1127,7 +1133,7 @@ public suspend fun <E> ReceiveChannel<E>.toSet(): Set<E> =
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1148,7 +1154,7 @@ public fun <E, R> ReceiveChannel<E>.flatMap(context: CoroutineContext = Dispatch
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1165,7 +1171,7 @@ public suspend inline fun <E, K> ReceiveChannel<E>.groupBy(keySelector: (E) -> K
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1181,7 +1187,7 @@ public suspend inline fun <E, K, V> ReceiveChannel<E>.groupBy(keySelector: (E) -
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1204,7 +1210,7 @@ public suspend inline fun <E, K, M : MutableMap<in K, MutableList<E>>> ReceiveCh
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1241,7 +1247,7 @@ public fun <E, R> ReceiveChannel<E>.map(context: CoroutineContext = Dispatchers.
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1263,7 +1269,7 @@ public fun <E, R> ReceiveChannel<E>.mapIndexed(context: CoroutineContext = Dispa
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1280,7 +1286,7 @@ public fun <E, R : Any> ReceiveChannel<E>.mapIndexedNotNull(context: CoroutineCo
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1300,7 +1306,7 @@ public suspend inline fun <E, R : Any, C : MutableCollection<in R>> ReceiveChann
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1320,7 +1326,7 @@ public suspend inline fun <E, R : Any, C : SendChannel<R>> ReceiveChannel<E>.map
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1341,7 +1347,7 @@ public suspend inline fun <E, R, C : MutableCollection<in R>> ReceiveChannel<E>.
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1360,7 +1366,7 @@ public suspend inline fun <E, R, C : SendChannel<R>> ReceiveChannel<E>.mapIndexe
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1375,7 +1381,7 @@ public fun <E, R : Any> ReceiveChannel<E>.mapNotNull(context: CoroutineContext =
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1393,7 +1399,7 @@ public suspend inline fun <E, R : Any, C : MutableCollection<in R>> ReceiveChann
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1411,7 +1417,7 @@ public suspend inline fun <E, R : Any, C : SendChannel<R>> ReceiveChannel<E>.map
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1429,7 +1435,7 @@ public suspend inline fun <E, R, C : MutableCollection<in R>> ReceiveChannel<E>.
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1446,7 +1452,7 @@ public suspend inline fun <E, R, C : SendChannel<R>> ReceiveChannel<E>.mapTo(des
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1466,7 +1472,7 @@ public fun <E> ReceiveChannel<E>.withIndex(context: CoroutineContext = Dispatche
  * The operation is _intermediate_ and _stateful_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1482,7 +1488,7 @@ public fun <E> ReceiveChannel<E>.distinct(): ReceiveChannel<E> =
  * The operation is _intermediate_ and _stateful_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1507,7 +1513,7 @@ public fun <E, K> ReceiveChannel<E>.distinctBy(context: CoroutineContext = Dispa
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1520,7 +1526,7 @@ public suspend fun <E> ReceiveChannel<E>.toMutableSet(): MutableSet<E> =
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1537,7 +1543,7 @@ public suspend inline fun <E> ReceiveChannel<E>.all(predicate: (E) -> Boolean): 
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1552,7 +1558,7 @@ public suspend fun <E> ReceiveChannel<E>.any(): Boolean =
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1569,7 +1575,7 @@ public suspend inline fun <E> ReceiveChannel<E>.any(predicate: (E) -> Boolean): 
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1585,7 +1591,7 @@ public suspend fun <E> ReceiveChannel<E>.count(): Int {
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1603,7 +1609,7 @@ public suspend inline fun <E> ReceiveChannel<E>.count(predicate: (E) -> Boolean)
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1624,7 +1630,7 @@ public suspend inline fun <E, R> ReceiveChannel<E>.fold(initial: R, operation: (
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1643,7 +1649,7 @@ public suspend inline fun <E, R> ReceiveChannel<E>.foldIndexed(initial: R, opera
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1670,7 +1676,7 @@ public suspend inline fun <E, R : Comparable<R>> ReceiveChannel<E>.maxBy(selecto
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1692,7 +1698,7 @@ public suspend fun <E> ReceiveChannel<E>.maxWith(comparator: Comparator<in E>): 
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1719,7 +1725,7 @@ public suspend inline fun <E, R : Comparable<R>> ReceiveChannel<E>.minBy(selecto
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1741,7 +1747,7 @@ public suspend fun <E> ReceiveChannel<E>.minWith(comparator: Comparator<in E>): 
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1756,7 +1762,7 @@ public suspend fun <E> ReceiveChannel<E>.none(): Boolean =
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1773,7 +1779,7 @@ public suspend inline fun <E> ReceiveChannel<E>.none(predicate: (E) -> Boolean):
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1797,7 +1803,7 @@ public suspend inline fun <S, E : S> ReceiveChannel<E>.reduce(operation: (acc: S
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1820,7 +1826,7 @@ public suspend inline fun <S, E : S> ReceiveChannel<E>.reduceIndexed(operation: 
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1838,7 +1844,7 @@ public suspend inline fun <E> ReceiveChannel<E>.sumBy(selector: (E) -> Int): Int
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1856,7 +1862,7 @@ public suspend inline fun <E> ReceiveChannel<E>.sumByDouble(selector: (E) -> Dou
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1871,7 +1877,7 @@ public fun <E : Any> ReceiveChannel<E?>.requireNoNulls(): ReceiveChannel<E> =
  * The operation is _terminal_.
  * This function [consumes][ReceiveChannel.consume] all elements of the original [ReceiveChannel].
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1895,7 +1901,7 @@ public suspend inline fun <E> ReceiveChannel<E>.partition(predicate: (E) -> Bool
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][ReceiveChannel.consume] all elements of both the original [ReceiveChannel] and the `other` one.
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi
@@ -1908,7 +1914,7 @@ public infix fun <E, R> ReceiveChannel<E>.zip(other: ReceiveChannel<R>): Receive
  * The operation is _intermediate_ and _stateless_.
  * This function [consumes][consume] all elements of both the original [ReceiveChannel] and the `other` one.
  *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
  */
 @ObsoleteCoroutinesApi

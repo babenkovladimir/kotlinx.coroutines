@@ -42,6 +42,8 @@ public interface SelectBuilder<in R> {
      * Clause that selects the given [block] after a specified timeout passes.
      * If timeout is negative or zero, [block] is selected immediately.
      *
+     * **Note: This is an experimental api.** It may be replaced with light-weight timer/timeout channels in the future.
+     *
      * @param timeMillis timeout time in milliseconds.
      */
     @ExperimentalCoroutinesApi

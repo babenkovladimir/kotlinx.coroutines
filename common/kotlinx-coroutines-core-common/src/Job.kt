@@ -170,6 +170,8 @@ public interface Job : CoroutineContext.Element {
      * When cancellation has a clear reason in the code, an instance of [CancellationException] should be created
      * at the corresponding original cancellation site and passed into this method to aid in debugging by providing
      * both the context of cancellation and text description of the reason.
+     *
+     * **Note: This is an experimental api.** Cancellation of a job with exception may change its semantics in the future.
      */
     @ExperimentalCoroutinesApi
     public fun cancel(cause: Throwable? = null): Boolean
@@ -491,6 +493,8 @@ public fun CoroutineContext.cancel(): Boolean =
  * Cancels [Job] of this context with an optional cancellation [cause]. The result is `true` if the job was
  * cancelled as a result of this invocation and `false` if there is no job in the context or if it was already
  * cancelled or completed. See [Job.cancel] for details.
+ *
+ * **Note: This is an experimental api.** Cancellation of a job with exception may change its semantics in the future.
  */
 @ExperimentalCoroutinesApi
 public fun CoroutineContext.cancel(cause: Throwable? = null): Boolean =
@@ -508,6 +512,8 @@ public fun CoroutineContext.cancelChildren() {
  * Cancels all children of the [Job] in this context with an optional cancellation [cause],
  * without touching the the state of this job itself.
  * It does not do anything if there is no job in the context or it has no children.
+ *
+ * **Note: This is an experimental api.** Cancellation of a job with exception may change its semantics in the future.
  */
 @ExperimentalCoroutinesApi
 public fun CoroutineContext.cancelChildren(cause: Throwable? = null) {

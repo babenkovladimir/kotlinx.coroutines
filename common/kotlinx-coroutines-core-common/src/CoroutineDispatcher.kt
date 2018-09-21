@@ -60,7 +60,7 @@ public abstract class CoroutineDispatcher :
      * parameter that allows one to optionally choose C#-style [CoroutineStart.UNDISPATCHED] behaviour
      * whenever it is needed for efficiency.
      *
-     * **Note: semantics of this method may change in the future when this function returns `false`**.
+     * **Note: This is an experimental api.** Execution semantics of coroutines may change in the future when this function returns `false`.
      */
     @ExperimentalCoroutinesApi
     public open fun isDispatchNeeded(context: CoroutineContext): Boolean = true

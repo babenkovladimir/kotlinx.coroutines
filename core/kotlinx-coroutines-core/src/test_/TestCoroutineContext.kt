@@ -25,7 +25,7 @@ import kotlin.coroutines.experimental.*
  * This dispatcher's virtual time will be automatically advanced based based on the delayed actions
  * within the Coroutine(s).
  *
- * **NOTE**: This API will become obsolete in future updates due to integration with structured concurrency.
+ * **Note: This API will become obsolete in future updates due to integration with structured concurrency.**
  *           See [issue #541](https://github.com/Kotlin/kotlinx.coroutines/issues/541).
  *
  * @param name A user-readable name for debugging purposes.
@@ -264,7 +264,7 @@ private class TimedRunnable(
  * [TestCoroutineContext.assertExceptions], the list of unhandled exceptions will have been cleared and this method will
  * not throw an [AssertionError].
  *
- * **NOTE**: This API will become obsolete in future updates due to integration with structured concurrency.
+ * **Note: This API will become obsolete in future updates due to integration with structured concurrency.**
  *           See [issue #541](https://github.com/Kotlin/kotlinx.coroutines/issues/541).
  *
  * @param testContext The provided [TestCoroutineContext]. If not specified, a default [TestCoroutineContext] will be

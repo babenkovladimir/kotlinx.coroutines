@@ -17,7 +17,7 @@ import kotlinx.coroutines.experimental.internal.*
  * See `BroadcastChannel()` factory function for the description of available
  * broadcast channel implementations.
  *
- * **Note**: This API is experimental and will be changed in the future updates.
+ * **Note: This is an experimental api.** It may be changed in the future updates.
  */
 @ExperimentalCoroutinesApi
 public interface BroadcastChannel<E> : SendChannel<E> {
@@ -78,7 +78,7 @@ public interface BroadcastChannel<E> : SendChannel<E> {
  * * when `capacity` is [CONFLATED] -- creates [ConflatedBroadcastChannel] that conflates back-to-back sends;
  * * otherwise -- throws [IllegalArgumentException].
  *
- * **Note**: This API is experimental and will be changed in the future updates.
+ * **Note: This is an experimental api.** It may be changed in the future updates.
  */
 @ExperimentalCoroutinesApi
 public fun <E> BroadcastChannel(capacity: Int): BroadcastChannel<E> =

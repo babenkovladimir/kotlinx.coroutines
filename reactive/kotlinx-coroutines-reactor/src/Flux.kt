@@ -28,6 +28,9 @@ import kotlin.coroutines.experimental.*
  * | `send`                                       | `onNext`
  * | Normal completion or `close` without cause   | `onComplete`
  * | Failure with exception or `close` with cause | `onError`
+ * 
+ * **Note: This is an experimental api.** Behaviour of publishers that work as children in a parent scope with respect
+ *        to cancellation and error handling may change in the future.
  */
 @ExperimentalCoroutinesApi
 fun <T> CoroutineScope.flux(

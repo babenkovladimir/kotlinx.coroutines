@@ -17,6 +17,8 @@ public interface SendChannel<in E> {
     /**
      * Returns `true` if this channel was closed by invocation of [close] and thus
      * the [send] and [offer] attempts throws exception.
+     *
+     * **Note: This is an experimental api.** This property may change its semantics and/or name in the future.
      */
     @ExperimentalCoroutinesApi
     public val isClosedForSend: Boolean
@@ -24,6 +26,8 @@ public interface SendChannel<in E> {
     /**
      * Returns `true` if the channel is full (out of capacity) and the [send] attempt will suspend.
      * This function returns `false` for [isClosedForSend] channel.
+     *
+     * **Note: This is an experimental api.** This property may change its semantics and/or name in the future.
      */
     @ExperimentalCoroutinesApi
     public val isFull: Boolean
@@ -113,6 +117,8 @@ public interface SendChannel<in E> {
      *
      * ```
      *
+     * **Note: This is an experimental api.** This function may change its semantics, parameters or return type in the future.
+     *
      * @throws UnsupportedOperationException if underlying channel doesn't support [invokeOnClose].
      * Implementation note: currently, [invokeOnClose] is unsupported only by Rx-like integrations
      *
@@ -132,6 +138,8 @@ public interface ReceiveChannel<out E> {
      * throws [ClosedReceiveChannelException]. If the channel was closed because of the exception, it
      * is considered closed, too, but it is called a _failed_ channel. All suspending attempts to receive
      * an element from a failed channel throw the original [close][SendChannel.close] cause exception.
+     *
+     * **Note: This is an experimental api.** This property may change its semantics and/or name in the future.
      */
     @ExperimentalCoroutinesApi
     public val isClosedForReceive: Boolean
@@ -139,6 +147,8 @@ public interface ReceiveChannel<out E> {
     /**
      * Returns `true` if the channel is empty (contains no elements) and the [receive] attempt will suspend.
      * This function returns `false` for [isClosedForReceive] channel.
+     *
+     * **Note: This is an experimental api.** This property may change its semantics and/or name in the future.
      */
     @ExperimentalCoroutinesApi
     public val isEmpty: Boolean
@@ -193,6 +203,8 @@ public interface ReceiveChannel<out E> {
      *
      * This function can be used in [select] invocation with [onReceiveOrNull] clause.
      * Use [poll] to try receiving from this channel without waiting.
+     *
+     * **Note: This is an experimental api.** This function may be replaced with a better on in the future.
      */
     @ExperimentalCoroutinesApi
     public suspend fun receiveOrNull(): E?
@@ -202,6 +214,8 @@ public interface ReceiveChannel<out E> {
      * is received from the channel or selects with `null` if if the channel
      * [isClosedForReceive] without cause. The [select] invocation fails with
      * the original [close][SendChannel.close] cause exception if the channel has _failed_.
+     *
+     * **Note: This is an experimental api.** This function may be replaced with a better on in the future.
      */
     @ExperimentalCoroutinesApi
     public val onReceiveOrNull: SelectClause1<E?>
@@ -245,6 +259,9 @@ public interface ReceiveChannel<out E> {
      * [ClosedReceiveChannelException] if it was cancelled without a cause.
      * A channel that was cancelled with non-null [cause] is called a _failed_ channel. Attempts to send or
      * receive on a failed channel throw the specified [cause] exception.
+     *
+     * **Note: This is an experimental api.** Semantics of _cancelling_ a channel with exception may
+     *         change in the future or this feature may be completely removed.
      */
     @ExperimentalCoroutinesApi
     public fun cancel(cause: Throwable? = null): Boolean

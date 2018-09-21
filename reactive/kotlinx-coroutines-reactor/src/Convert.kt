@@ -16,6 +16,9 @@ import kotlin.coroutines.experimental.*
  * Every subscriber gets the signal at the same time.
  * Unsubscribing from the resulting mono **does not** affect the original job in any way.
  *
+ * **Note: This is an experimental api.** Conversion of coroutines primitives to reactive entities may change
+ *    in the future to account for the concept of structured concurrency.
+ *
  * @param context -- the coroutine context from which the resulting mono is going to be signalled
  */
 @ExperimentalCoroutinesApi
@@ -42,6 +45,9 @@ public fun Job.asMono(): Mono<Unit> = asMono(EmptyCoroutineContext)
  * Every subscriber gets the same completion value.
  * Unsubscribing from the resulting mono **does not** affect the original deferred value in any way.
  *
+ * **Note: This is an experimental api.** Conversion of coroutines primitives to reactive entities may change
+ *    in the future to account for the concept of structured concurrency.
+ *
  * @param context -- the coroutine context from which the resulting mono is going to be signalled
  */
 @ExperimentalCoroutinesApi
@@ -67,10 +73,10 @@ public fun <T> Deferred<T?>.asMono(): Mono<T> = asMono(EmptyCoroutineContext)
  * Every subscriber receives values from this channel in **fan-out** fashion. If the are multiple subscribers,
  * they'll receive values in round-robin way.
  *
- * @param context -- the coroutine context from which the resulting flux is going to be signalled
- *
- * **NOTE**: This API will become obsolete in future updates with rollout of lazy asynchronous streams.
+ * **Note: This API will become obsolete in future updates with introduction of lazy asynchronous streams.**
  *           See [issue #254](https://github.com/Kotlin/kotlinx.coroutines/issues/254).
+ *
+ * @param context -- the coroutine context from which the resulting flux is going to be signalled
  */
 @ObsoleteCoroutinesApi
 public fun <T> ReceiveChannel<T>.asFlux(context: CoroutineContext = EmptyCoroutineContext): Flux<T> = GlobalScope.flux(context) {
